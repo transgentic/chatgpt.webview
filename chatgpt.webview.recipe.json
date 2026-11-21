@@ -1,0 +1,264 @@
+{
+  "version": "1.3.1",
+  "id": "chatgpt",
+  "title": "OpenAI ChatGPT",
+  "domainMatch": "chatgpt.com",
+  "url": "https://chatgpt.com/",
+  "newChatUrl": "https://chatgpt.com/",
+  "resetUrlPatterns": [
+    {
+      "pattern": "/projects",
+      "redirectTo": "/"
+    }
+  ],
+  "authStrategy": "cookie_sync",
+  "auth": {
+    "authCookies": [
+      "__Secure-next-auth.session-token",
+      "__Host-next-auth.session-token"
+    ],
+    "minCookieLength": 25,
+    "loggedInSelector": "button[data-testid=\"profile-button\"], button[data-testid=\"user-menu\"], #projects-page-search, [data-testid=\"project-directory-scroll-root\"], a[href=\"/projects\"], button[aria-label*=\"Profile\" i], button[aria-label*=\"Account\" i]",
+    "loggedOutSelector": "button[data-testid=\"login-button\"], button[data-testid=\"signup-button\"], a[href*=\"/auth/login\"], a[href*=\"/auth/signup\"]",
+    "loginUrls": [
+      "/auth/login",
+      "/auth/signup"
+    ],
+    "clientBootstrapSelector": "#client-bootstrap"
+  },
+  "rateLimit": {
+    "textPatterns": [
+      "You've reached your limit",
+      "Too many requests in 1 hour",
+      "Please try again later",
+      "Rate limit reached"
+    ],
+    "selector": "[data-testid=\"request-error-banner\"], .text-red-500"
+  },
+  "temporaryChat": {
+    "enabled": true,
+    "personalization": "selectable",
+    "activationSteps": [
+      {
+        "action": "click",
+        "target": {
+          "role": "button",
+          "name": "Temporary chat"
+        }
+      }
+    ],
+    "activeWhen": {
+      "selectors": [
+        "[data-testid=\"temporary-chat-label\"]",
+        "button[aria-label=\"Turn off temporary chat\"]",
+        "button[aria-label=\"Save chat\"]"
+      ]
+    },
+    "inactiveWhen": {
+      "role": "button",
+      "name": "Temporary chat"
+    },
+    "continuation": {
+      "pathPrefix": "/c/",
+      "queryParam": "temporary-chat",
+      "queryValue": "true",
+      "provisionalPathPrefix": "/c/local-chatgpt%3A"
+    },
+    "variants": {
+      "personalized": {
+        "activationSteps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": [
+                "Personalized",
+                "Unpersonalized"
+              ]
+            }
+          },
+          {
+            "action": "click",
+            "target": {
+              "selectors": "[role=\"menuitem\"], [role=\"menuitemradio\"], [role=\"menuitemcheckbox\"], [role=\"option\"]",
+              "name": [
+                "Personalized",
+                "Personalized This chat can reference memory, plugins, and custom instructions",
+                "PersonalizedThis chat can reference memory, plugins, and custom instructions"
+              ]
+            }
+          }
+        ],
+        "activeWhen": {
+          "role": "button",
+          "name": "Personalized"
+        },
+        "continuationWhen": {
+          "role": "button",
+          "name": "Save chat"
+        }
+      },
+      "unpersonalized": {
+        "activationSteps": [
+          {
+            "action": "click",
+            "target": {
+              "role": "button",
+              "name": [
+                "Personalized",
+                "Unpersonalized"
+              ]
+            }
+          },
+          {
+            "action": "click",
+            "target": {
+              "selectors": "[role=\"menuitem\"], [role=\"menuitemradio\"], [role=\"menuitemcheckbox\"], [role=\"option\"]",
+              "name": [
+                "Unpersonalized",
+                "Unpersonalized This chat will ignore memory, plugins, and custom instructions",
+                "UnpersonalizedThis chat will ignore memory, plugins, and custom instructions"
+              ]
+            }
+          }
+        ],
+        "activeWhen": {
+          "role": "button",
+          "name": "Unpersonalized"
+        },
+        "continuationWhen": {
+          "role": "button",
+          "name": "Save chat"
+        }
+      }
+    }
+  },
+  "createdAt": "2026-01-01T00:00:00.000Z",
+  "selectors": {
+    "inputPrompt": "[data-composer-markdown][contenteditable=\"true\"], #prompt-textarea, div.ProseMirror[contenteditable=\"true\"], textarea[aria-label=\"Ask ChatGPT\"]",
+    "submitButton": "button[data-testid=\"send-button\"], button[type=\"submit\"][aria-label=\"Send\"], button[aria-label=\"Send prompt\"]",
+    "stopButton": "button[data-testid=\"stop-button\"], button[aria-label*=\"Stop\" i]",
+    "modelDropdownTrigger": "button[aria-label=\"Select ChatGPT model\"], [data-testid=\"model-selector-button\"]"
+  },
+  "modelSelection": {
+    "effort": {
+      "labels": {
+        "instant": "Instant",
+        "low": "Low",
+        "medium": "Medium",
+        "high": "High",
+        "extra": "Extra High",
+        "pro": "Pro"
+      },
+      "panel": "[data-reasoning-slider=true], [role=\"slider\"][aria-label=\"Power\"]",
+      "slider": "[role=\"slider\"]"
+    },
+    "trigger": "[data-testid=\"model-selector-button\"], button[aria-label=\"Select ChatGPT model\" i]",
+    "item": "[role=\"menuitemradio\"], [role=\"option\"][data-model-id]",
+    "submenu": "[data-model-picker-view-toggle=\"true\"]",
+    "disabledText": "Usage limit reached",
+    "openInput": "native",
+    "selectInput": "pointer"
+  },
+  "response": {
+    "container": "[data-content-search-unit-key]:has(> [data-conversation-role=\"assistant\"]), [data-message-author-role=\"assistant\"], [data-testid^=\"conversation-turn-\"]:has([data-message-author-role=\"assistant\"]), div.agent-turn, main [data-testid=\"generated-image-gallery\"]",
+    "textSelector": "[data-markdown-text-style=\"assistant-message\"], .response-content-markdown, .markdown, .prose",
+    "actionButtons": "button[data-testid*=\"copy\" i], button[aria-label*=\"Copy\" i], button[aria-label*=\"Good response\" i], button[aria-label*=\"Bad response\" i]",
+    "generatingIndicator": "[class*=\"imagegen-loading\"], [class*=\"placeholder-shimmer\"], .animate-pulse",
+    "excludeSelectors": [
+      "details",
+      "[data-testid*=\"thought\" i]",
+      "[data-testid*=\"reasoning\" i]",
+      ".thinking-accordion"
+    ],
+    "modes": {
+      "text": {
+        "enabled": true,
+        "contentSelector": "[data-markdown-text-style=\"assistant-message\"], .response-content-markdown, .markdown, .prose",
+        "mediaKind": "text",
+        "inputAttachments": {
+          "fileInput": [
+            "input[type=\"file\"][aria-label=\"Attach files\"]",
+            "input[type=\"file\"]:not([accept])"
+          ],
+          "acceptedKinds": [
+            "image",
+            "document"
+          ],
+          "multiple": true,
+          "ready": "[data-composer-attachments]:not(:has([role=\"progressbar\"])) button[aria-label^=\"Remove \"]:not(:disabled)",
+          "cleanup": "[data-composer-attachments] button[aria-label^=\"Remove \"]"
+        }
+      },
+      "image": {
+        "enabled": true,
+        "contentSelector": "img[src*=\"backend-api/estuary/content\"], img[src*=\"estuary/content\"], img[alt*=\"Generated image\" i], div[class*=\"imagegen\"] img, div[id^=\"image-\"] img, img[src*=\"dall-e\"], img[src*=\"oaiusercontent\"], img.dall-e-image",
+        "mediaKind": "image",
+        "inputAttachments": {
+          "fileInput": [
+            "input[type=\"file\"][aria-label=\"Attach files\"]",
+            "input[type=\"file\"]:not([accept])"
+          ],
+          "acceptedKinds": [
+            "image"
+          ],
+          "multiple": true,
+          "ready": "[data-composer-attachments]:not(:has([role=\"progressbar\"])) button[aria-label^=\"Remove \"]:not(:disabled)",
+          "cleanup": "[data-composer-attachments] button[aria-label^=\"Remove \"]"
+        },
+        "generation": {
+          "activationSteps": [
+            {
+              "action": "click",
+              "target": {
+                "selectors": "button[data-composer-navigation-target=\"add-context\"]"
+              }
+            },
+            {
+              "action": "click",
+              "target": {
+                "selectors": "button, [role=\"menuitem\"], [role=\"option\"]",
+                "name": [
+                  "Create image",
+                  "Create an image"
+                ],
+                "nameMatch": "contains"
+              }
+            }
+          ],
+          "unavailableWhen": {
+            "selectors": "[aria-disabled=\"true\"] [data-menu-row-content]",
+            "name": "Create image"
+          },
+          "unavailableMessage": "ChatGPT has disabled Create image for this conversation.",
+          "activeWhen": {
+            "selectors": "[data-inline-selection-pill][data-system-hint-type=\"picture_v2\"]"
+          },
+          "settings": [],
+          "nativeDefaults": {
+            "quality": "automatic",
+            "aspect_ratio": "automatic"
+          }
+        }
+      },
+      "video": {
+        "enabled": true,
+        "contentSelector": "video source, video[src], [data-testid*=\"video\"] video, video, a[download][href*=\"video\"]",
+        "downloadSelector": "a[download][href*=\"video\"]",
+        "mediaKind": "video"
+      },
+      "music": {
+        "enabled": true,
+        "contentSelector": "audio source, audio[src], [data-testid*=\"audio\"] audio, audio, [data-testid=\"audio-player\"] audio",
+        "mediaKind": "audio"
+      }
+    }
+  },
+  "modeSchemaVersion": 2,
+  "changelog": [
+    "Detect completed generated-image galleries outside assistant text turns."
+  ],
+  "schemaVersion": 1,
+  "repository": "chatgpt.webview",
+  "providerType": "webview"
+}
