@@ -1,7 +1,8 @@
 {
+  "iconName": "Bot",
   "version": "1.3.1",
   "id": "chatgpt",
-  "title": "OpenAI ChatGPT",
+  "title": "ChatGPT",
   "domainMatch": "chatgpt.com",
   "url": "https://chatgpt.com/",
   "newChatUrl": "https://chatgpt.com/",
